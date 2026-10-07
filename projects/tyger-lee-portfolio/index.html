@@ -1,0 +1,998 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tyger Lee — Portfolio 2026</title>
+  <meta name="description" content="Tyger Lee — designer & illustrator. Logos, marks, identity and illustration. Portfolio 2026." />
+  <meta name="theme-color" content="#e9e8e4" />
+
+  <!-- Archivo (variable width + weight: used extra-wide & black for display) + Caveat (handwriting) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,300..900&family=Caveat:wght@500;700&display=swap" rel="stylesheet" />
+
+  <style>
+    /* =====================================================================
+       DESIGN TOKENS — change these to re-skin the whole site
+       ===================================================================== */
+    :root {
+      /* Colour */
+      --paper:        #e9e8e4;
+      --paper-light:  #f4f3ef;
+      --ink:          #151515;
+      --ink-soft:     #3a3a3a;
+      --ink-muted:    #5c5c5a;
+      --band:         #101010;
+      --band-2:       #1a1a1a;
+      --red:          #ff1f2d;
+      --red-deep:     #d90f1c;
+      --white:        #f5f5f2;
+      --polaroid:     #f6f4ee;
+      --grid-line:    rgba(21, 21, 21, 0.085);
+      --grid-line-dk: rgba(255, 255, 255, 0.05);
+      --frame:        #c2304a;            /* selection-box line colour */
+
+      /* Type */
+      --font-display: "Archivo", "Arial Black", Impact, sans-serif;
+      --font-body:    "Archivo", "Helvetica Neue", Arial, sans-serif;
+      --font-hand:    "Caveat", "Comic Sans MS", cursive;
+      --wide:  125%;     /* font-stretch for display type */
+      --body-wide: 110%;
+
+      --fs-mega:   clamp(2.6rem, 10.6vw, 12.5rem);
+      --fs-h2:     clamp(2.4rem, 7vw, 6.5rem);
+      --fs-h3:     clamp(1.6rem, 3.2vw, 2.6rem);
+      --fs-body:   clamp(0.95rem, 0.9rem + 0.2vw, 1.05rem);
+      --fs-small:  0.8125rem;
+      --fs-hand:   clamp(1.5rem, 2.2vw, 2.1rem);
+
+      /* Space & shape */
+      --gutter:   clamp(1rem, 4vw, 4.5rem);
+      --gap:      clamp(1rem, 2vw, 2rem);
+      --section:  clamp(4.5rem, 10vw, 9rem);
+      --max:      1440px;
+      --grid:     32px;     /* graph-paper cell */
+      --tear:     28px;     /* max torn-edge depth */
+
+      /* Motion */
+      --ease:      cubic-bezier(0.22, 1, 0.36, 1);
+      --ease-back: cubic-bezier(0.34, 1.56, 0.64, 1);
+      --t-fast:    180ms;
+      --t-med:     420ms;
+      --t-slow:    900ms;
+    }
+
+    /* =====================================================================
+       RESET
+       ===================================================================== */
+    *, *::before, *::after { box-sizing: border-box; }
+    * { margin: 0; padding: 0; }
+    html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+    @media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
+    body { min-height: 100vh; line-height: 1.55; -webkit-font-smoothing: antialiased; }
+    img, svg, picture { display: block; max-width: 100%; }
+    button, input { font: inherit; color: inherit; }
+    button { background: none; border: 0; cursor: pointer; }
+    a { color: inherit; text-decoration: none; }
+    ul, ol { list-style: none; }
+    h1, h2, h3 { text-wrap: balance; overflow-wrap: break-word; }
+    p { text-wrap: pretty; }
+
+    /* =====================================================================
+       BASE
+       ===================================================================== */
+    body {
+      background: var(--band);
+      color: var(--ink);
+      font-family: var(--font-body);
+      font-stretch: var(--body-wide);
+      font-size: var(--fs-body);
+      overflow-x: hidden;
+    }
+    ::selection { background: var(--red); color: var(--white); }
+    :focus-visible { outline: 3px solid var(--red); outline-offset: 4px; }
+
+    .skip {
+      position: fixed; left: 1rem; top: -4rem; z-index: 200;
+      background: var(--red); color: var(--white); padding: .75rem 1rem; font-weight: 700;
+    }
+    .skip:focus { top: 1rem; }
+
+    .wrap { width: 100%; max-width: var(--max); margin-inline: auto; padding-inline: var(--gutter); }
+    .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+    .display {
+      font-family: var(--font-display);
+      font-stretch: var(--wide);
+      font-weight: 900;
+      line-height: .86;
+      letter-spacing: -0.02em;
+      text-transform: uppercase;
+    }
+    .hand { font-family: var(--font-hand); font-weight: 500; font-stretch: normal; line-height: 1.1; }
+
+    /* ---------- Paper surfaces: graph grid + crumple texture ---------- */
+    .paper {
+      position: relative;
+      background-color: var(--paper);
+      background-image:
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='900' height='900'%3E%3Cfilter id='c'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.0045 0.007' numOctaves='5' seed='11' stitchTiles='stitch'/%3E%3CfeDiffuseLighting lighting-color='%23ffffff' surfaceScale='3.2'%3E%3CfeDistantLight azimuth='225' elevation='58'/%3E%3C/feDiffuseLighting%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23c)'/%3E%3C/svg%3E"),
+        linear-gradient(var(--grid-line) 1px, transparent 1px),
+        linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+      background-size: 900px 900px, var(--grid) var(--grid), var(--grid) var(--grid);
+      background-blend-mode: multiply, normal, normal;
+    }
+    .dark {
+      position: relative;
+      background-color: var(--band);
+      color: var(--white);
+      background-image:
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='900' height='900'%3E%3Cfilter id='c'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.005 0.008' numOctaves='4' seed='3' stitchTiles='stitch'/%3E%3CfeDiffuseLighting lighting-color='%23ffffff' surfaceScale='2'%3E%3CfeDistantLight azimuth='225' elevation='70'/%3E%3C/feDiffuseLighting%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23c)' opacity='0.07'/%3E%3C/svg%3E");
+      background-size: 900px 900px;
+    }
+
+    /* ---------- Torn paper edges (polygons are generated in JS) ---------- */
+    .tear-wrap { position: relative; z-index: 2; filter: drop-shadow(0 10px 14px rgba(0,0,0,.45)); }
+    .tear-wrap > .rim,
+    .tear-wrap > .paper { clip-path: var(--clip, none); }
+    .tear-wrap > .rim {
+      position: absolute; inset: 0;
+      background: var(--paper-light);
+      clip-path: var(--clip-rim, none);
+    }
+    .tear-wrap.tear-bottom { margin-bottom: calc(var(--tear) * -2.2); }
+    .tear-wrap.tear-top    { margin-top:    calc(var(--tear) * -2.2); }
+
+    /* ---------- Shared glyph trio (✸ ✦ ♣) ---------- */
+    .glyphs { display: inline-flex; align-items: center; gap: .08em; }
+    .glyphs svg { width: 1em; height: 1em; fill: currentColor; }
+
+    /* ---------- Selection box (Figma-style frame with handles) ---------- */
+    .sel { position: relative; outline: 1.5px solid var(--frame); outline-offset: 0; }
+    .sel > i {
+      position: absolute; width: 12px; height: 12px; background: #fff;
+      border: 1.5px solid var(--frame); z-index: 3; pointer-events: none;
+      transform: translate(-50%, -50%);
+    }
+    .sel > i:nth-of-type(1) { left: 0;    top: 0; }
+    .sel > i:nth-of-type(2) { left: 50%;  top: 0; }
+    .sel > i:nth-of-type(3) { left: 100%; top: 0; }
+    .sel > i:nth-of-type(4) { left: 100%; top: 50%; }
+    .sel > i:nth-of-type(5) { left: 100%; top: 100%; }
+    .sel > i:nth-of-type(6) { left: 50%;  top: 100%; }
+    .sel > i:nth-of-type(7) { left: 0;    top: 100%; }
+    .sel > i:nth-of-type(8) { left: 0;    top: 50%; }
+    .sel-tag {
+      position: absolute; left: 50%; top: calc(100% + 14px); transform: translateX(-50%);
+      background: var(--frame); color: #fff; font: 600 11px/1 var(--font-body); font-stretch: 100%;
+      padding: 4px 6px; border-radius: 3px; white-space: nowrap; letter-spacing: .02em;
+    }
+
+    /* ---------- Reveal on scroll (only when JS is running) ---------- */
+    .js .reveal { opacity: 0; transform: translateY(28px); transition: opacity var(--t-slow) var(--ease), transform var(--t-slow) var(--ease); transition-delay: var(--d, 0ms); }
+    .js .reveal.is-in { opacity: 1; transform: none; }
+
+    /* =====================================================================
+       NAV + PROGRESS
+       ===================================================================== */
+    .progress {
+      position: fixed; inset: 0 0 auto 0; height: 3px; z-index: 120;
+      background: var(--red); transform-origin: 0 50%; transform: scaleX(var(--p, 0));
+    }
+    .nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 110;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: .9rem var(--gutter);
+      color: #fff; mix-blend-mode: difference;
+      pointer-events: none;
+    }
+    .nav a { pointer-events: auto; }
+    .nav-logo { font-family: var(--font-display); font-stretch: var(--wide); font-weight: 900; font-size: 1rem; letter-spacing: -.01em; text-transform: uppercase; display: inline-flex; align-items: center; min-height: 44px; }
+    .nav-links { display: flex; gap: clamp(.75rem, 2.4vw, 2.25rem); }
+    .nav-links a {
+      position: relative; display: inline-flex; align-items: center; min-height: 44px;
+      font-size: var(--fs-small); font-weight: 600; text-transform: uppercase; letter-spacing: .04em;
+    }
+    .nav-links a::after {
+      content: ""; position: absolute; left: 0; right: 0; bottom: 10px; height: 2px; background: currentColor;
+      transform: scaleX(0); transform-origin: right; transition: transform var(--t-med) var(--ease);
+    }
+    .nav-links a:hover::after, .nav-links a[aria-current="true"]::after { transform: scaleX(1); transform-origin: left; }
+
+    /* =====================================================================
+       01 · HERO — PORTF(face)LIO
+       ===================================================================== */
+    .hero { padding-top: clamp(7rem, 16vw, 13rem); padding-bottom: clamp(3rem, 6vw, 5rem); overflow: hidden; }
+    .hero-inner { max-width: 1240px; margin-inline: auto; }
+    .hero-top {
+      display: flex; justify-content: space-between; align-items: flex-end; gap: 1rem;
+      font-family: var(--font-display); font-stretch: var(--wide); font-weight: 800; text-transform: uppercase;
+      font-size: clamp(.8rem, 2.05vw, 1.75rem); letter-spacing: -.01em; line-height: 1;
+      margin-bottom: .25em;
+    }
+    .hero-title {
+      display: flex; align-items: center; justify-content: center;
+      font-size: var(--fs-mega); white-space: nowrap; color: var(--ink);
+    }
+    .face {
+      position: relative; display: inline-block; flex: none;
+      width: 1.12em; height: 1.4em; margin: -.24em -.02em -.12em -.03em;
+      cursor: pointer;
+    }
+    .face svg { width: 100%; height: 100%; overflow: visible; transition: transform var(--t-med) var(--ease-back); }
+    .face:hover svg, .face:focus-visible svg { transform: rotate(-7deg) scale(1.06); }
+    .face .lid { transform-origin: center; transform-box: fill-box; transform: scaleY(0); }
+    .face.blink .lid { animation: blink 220ms ease-in-out; }
+    @keyframes blink { 50% { transform: scaleY(1); } }
+
+    .hero-name {
+      position: relative; width: max-content; margin: clamp(.75rem, 2vw, 1.5rem) 0 0 calc(50% + .2em);
+      display: flex; align-items: flex-end; gap: .4rem; color: var(--ink);
+    }
+    .hero-name svg { width: clamp(38px, 4vw, 54px); height: auto; transform: translateY(-.6em); }
+    .hero-name span { font-size: clamp(1.7rem, 3vw, 2.6rem); transform: rotate(-3deg); }
+
+    .hero-glyphs { display: flex; justify-content: center; margin-top: clamp(3rem, 8vw, 6.5rem); font-size: clamp(2.2rem, 4.4vw, 3.8rem); color: var(--ink); }
+    .hero-glyphs svg { transition: transform var(--t-slow) var(--ease-back); }
+    .hero-glyphs:hover svg:nth-child(1) { transform: rotate(90deg); }
+    .hero-glyphs:hover svg:nth-child(2) { transform: scale(1.3); }
+    .hero-glyphs:hover svg:nth-child(3) { transform: rotate(-20deg); }
+
+    .scroll-hint {
+      display: flex; flex-direction: column; align-items: center; gap: .35rem; margin-top: 2rem;
+      font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .14em; color: var(--ink-muted);
+    }
+    .scroll-hint::after { content: ""; width: 1.5px; height: 40px; background: linear-gradient(var(--ink), transparent); animation: drip 1.8s var(--ease) infinite; transform-origin: top; }
+    @keyframes drip { 0% { transform: scaleY(0); } 60% { transform: scaleY(1); } 100% { transform: scaleY(1); opacity: 0; } }
+
+    /* =====================================================================
+       02 · HELLO / ABOUT
+       ===================================================================== */
+    .about { padding-top: clamp(3rem, 6vw, 5rem); padding-bottom: calc(var(--section) + var(--tear) * 2); }
+    .about-grid { display: grid; grid-template-columns: 3fr 5fr 4fr; gap: clamp(1.5rem, 4vw, 4.5rem); align-items: start; }
+
+    .figure-frame { aspect-ratio: 9 / 20; max-width: 270px; width: 100%; justify-self: center; display: grid; place-items: end center; overflow: visible; }
+    .figure-frame svg { width: 88%; height: 96%; }
+    .figure-frame .sel-tag { opacity: 0; transition: opacity var(--t-fast) var(--ease); }
+    .figure-frame:hover .sel-tag { opacity: 1; }
+
+    .hello h2 { font-size: clamp(3.5rem, 8vw, 7.25rem); margin-bottom: 1.6rem; }
+    .hello .hi { font-weight: 700; margin-bottom: 1.1rem; }
+    .hello p + p { margin-top: 1.1rem; }
+    .hello p { color: var(--ink-soft); max-width: 52ch; }
+    .block-title { font-size: clamp(1.9rem, 3.4vw, 3.1rem); margin: clamp(2.5rem, 4vw, 3.25rem) 0 1rem; }
+    .entry b { display: block; font-weight: 700; font-size: .95rem; }
+    .entry span { display: block; color: var(--ink-muted); font-size: .92rem; margin-top: .3rem; }
+    .entry .yr { font-family: var(--font-display); font-stretch: var(--wide); font-weight: 800; font-size: 1.15rem; color: var(--ink); margin: 0 0 .35rem; }
+    .entry + .entry { margin-top: 1.6rem; }
+    .side .block-title:first-child { margin-top: .6rem; }
+
+    .skills { display: grid; grid-template-columns: repeat(3, 64px); gap: 1.1rem 1.5rem; }
+    .app {
+      position: relative; width: 64px; height: 64px; border-radius: 14px;
+      display: grid; place-items: center;
+      font-family: "Archivo", sans-serif; font-stretch: 100%; font-weight: 600; font-size: 1.75rem; letter-spacing: -.02em;
+      box-shadow: 0 2px 0 rgba(0,0,0,.15);
+      transition: transform var(--t-med) var(--ease-back);
+    }
+    .app:hover, .app:focus-visible { transform: translateY(-6px) rotate(-6deg); }
+    .app::after {
+      content: attr(data-name); position: absolute; left: 50%; top: calc(100% + 8px); transform: translate(-50%, -4px);
+      background: var(--ink); color: var(--white); font-size: 11px; font-weight: 600; padding: 4px 7px; border-radius: 4px; white-space: nowrap;
+      opacity: 0; pointer-events: none; transition: opacity var(--t-fast), transform var(--t-fast) var(--ease); z-index: 4;
+    }
+    .app:hover::after, .app:focus-visible::after { opacity: 1; transform: translate(-50%, 0); }
+    .app-ps { background: #001e36; color: #31a8ff; border: 2px solid #31a8ff; }
+    .app-ai { background: #330000; color: #ff9a00; border: 2px solid #ff9a00; }
+    .app-ae { background: #00005b; color: #9999ff; border: 2px solid #9999ff; }
+    .app-pr { background: #00005b; color: #9999ff; border: 2px solid #9999ff; }
+    .app-pc { background: linear-gradient(145deg, #2c2c2e, #111); }
+    .app-bl { background: transparent; box-shadow: none; }
+    .app svg { width: 70%; height: 70%; }
+
+    /* =====================================================================
+       03 · BAND — STRATEGY ✦♣ CREATIVITY + red cutout portrait
+       ===================================================================== */
+    .band { overflow: hidden; padding-block: calc(var(--tear) * 2.2 + clamp(2rem, 5vw, 4rem)); }
+    .band-inner { position: relative; height: clamp(300px, 36vw, 540px); display: grid; align-items: center; }
+    .band-marquee { position: absolute; inset: 0; display: flex; align-items: center; transform: rotate(-2deg) scale(1.05); }
+    .marquee { display: flex; width: max-content; animation: marquee var(--speed, 38s) linear infinite; }
+    .marquee > * { flex: none; }
+    .marquee:hover { animation-play-state: paused; }
+    @keyframes marquee { to { transform: translateX(-50%); } }
+    .band-words {
+      display: flex; align-items: center; gap: .35em; padding-right: .35em;
+      font-size: clamp(4rem, 12.5vw, 12rem); color: var(--white);
+    }
+    .band-words .glyphs { font-size: .6em; color: var(--white); }
+
+    .cutout {
+      position: absolute; left: 50%; bottom: 0;
+      transform: translateX(-50%);
+      width: clamp(240px, 30vw, 440px); z-index: 3;
+    }
+    .cutout img, .cutout svg { width: 100%; height: auto; filter: url(#red-outline); }
+    .cutout-wrap { position: relative; z-index: 3; }
+
+    /* =====================================================================
+       04 · THE STU — polaroids
+       ===================================================================== */
+    .stu { padding-top: calc(var(--tear) * 2.2 + var(--section)); padding-bottom: var(--section); text-align: center; overflow: hidden; }
+    .stu h2 { font-size: clamp(2.2rem, 4.6vw, 3.6rem); margin-bottom: clamp(2.5rem, 5vw, 4rem); }
+    .polaroids { display: flex; justify-content: center; align-items: flex-start; gap: clamp(.5rem, 1.5vw, 1.5rem); padding-inline: var(--gutter); }
+    .polaroid {
+      flex: 0 1 380px;
+      background: var(--polaroid);
+      padding: clamp(.75rem, 1.4vw, 1.2rem) clamp(.75rem, 1.4vw, 1.2rem) 0;
+      box-shadow: 0 1px 0 rgba(0,0,0,.05), 0 18px 34px -10px rgba(0,0,0,.4);
+      rotate: var(--r, 0deg); translate: 0 var(--y, 0);
+      transition: rotate var(--t-med) var(--ease-back), translate var(--t-med) var(--ease-back), scale var(--t-med) var(--ease-back), transform var(--t-slow) var(--ease), opacity var(--t-slow) var(--ease), box-shadow var(--t-med) var(--ease);
+      position: relative;
+    }
+    .polaroid:nth-child(1) { --r: -7deg; --y: 1rem; }
+    .polaroid:nth-child(2) { --r: -2.5deg; --y: 2.4rem; z-index: 1; }
+    .polaroid:nth-child(3) { --r: 5deg; --y: .4rem; }
+    .polaroid:hover, .polaroid:focus-within { rotate: 0deg; translate: 0 -8px; scale: 1.04; z-index: 5; box-shadow: 0 30px 50px -14px rgba(0,0,0,.5); }
+    .polaroid .shot { aspect-ratio: 4 / 3.15; overflow: hidden; background: #111; position: relative; }
+    .polaroid .shot > * { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+    .polaroid figcaption {
+      min-height: clamp(7rem, 11vw, 9.5rem);
+      display: flex; flex-direction: column; justify-content: center; gap: .3rem;
+      padding: .9rem .6rem 1.1rem; color: #1d1d1d; font-size: var(--fs-hand);
+    }
+    .polaroid figcaption small { font-size: .8em; align-self: flex-end; padding-right: 1rem; }
+    .tape {
+      position: absolute; top: -14px; left: 50%; width: 96px; height: 28px; transform: translateX(-50%) rotate(-3deg);
+      background: rgba(255, 255, 255, .55); box-shadow: 0 1px 2px rgba(0,0,0,.12);
+      backdrop-filter: blur(1px);
+    }
+
+    /* "photos" made with CSS — swap for <img> */
+    .ph-desk {
+      background:
+        radial-gradient(circle at 20% 18%, transparent 0 9%, #ffd8a8 9.5% 11.5%, transparent 12%),
+        radial-gradient(ellipse 40% 30% at 55% 35%, rgba(150, 70, 255, .55), transparent 70%),
+        radial-gradient(ellipse 30% 25% at 82% 30%, rgba(255, 70, 160, .45), transparent 70%),
+        linear-gradient(transparent 62%, #2a3a2c 62% 100%),
+        linear-gradient(160deg, #3b2b14, #120d08);
+    }
+    .ph-desk::after { content: ""; position: absolute; left: 34%; top: 30%; width: 30%; height: 26%; background: linear-gradient(#1b2a4a, #0b1427); border: 3px solid #333; border-radius: 3px; box-shadow: 0 0 30px rgba(80,140,255,.5); }
+    .ph-eyes {
+      background:
+        radial-gradient(ellipse 9% 5% at 72% 66%, #0a0705 0 40%, #6b4a32 45% 70%, transparent 75%),
+        radial-gradient(ellipse 9% 5% at 34% 66%, #0a0705 0 40%, #6b4a32 45% 70%, transparent 75%),
+        radial-gradient(ellipse 70% 55% at 55% 80%, #8b5a3c, #4b2c1b 60%, transparent 85%),
+        radial-gradient(ellipse 90% 45% at 50% 10%, #050403 0 70%, transparent 72%),
+        linear-gradient(#120b07, #2a1a10);
+    }
+    .ph-work {
+      background:
+        radial-gradient(ellipse 30% 40% at 25% 55%, #1a120c 0 60%, transparent 62%),
+        radial-gradient(ellipse 35% 25% at 60% 42%, rgba(70, 130, 255, .65), transparent 70%),
+        linear-gradient(90deg, transparent 72%, #c95a3a 72% 74%, #f2c94c 74% 76%, #3aa0c9 76% 78%, #e05b8a 78% 80%, transparent 80%),
+        linear-gradient(transparent 8%, rgba(255, 230, 160, .7) 8% 10%, transparent 10%),
+        linear-gradient(160deg, #2e2a12, #0d0c06);
+    }
+
+    /* =====================================================================
+       05 · LOGOS & MARKS
+       ===================================================================== */
+    .ticker { background: var(--band); color: var(--white); border-block: 1px solid #2a2a2a; overflow: hidden; position: relative; z-index: 2; }
+    .ticker .marquee { --speed: 26s; }
+    .ticker-item {
+      display: flex; align-items: center; gap: .9em; padding: .55rem .9em;
+      font-size: clamp(1rem, 2.1vw, 1.75rem);
+    }
+    .ticker-item .glyphs { font-size: .8em; }
+
+    .logos-hero {
+      position: relative; min-height: clamp(520px, 62vw, 900px); overflow: hidden; color: var(--red);
+      display: grid; grid-template-rows: auto 1fr; isolation: isolate;
+    }
+    .logos-hero .bg {
+      position: absolute; inset: -4%; z-index: -2;
+      /* Swap for your own photo:  background: url(your-photo.jpg) center/cover; */
+      background:
+        radial-gradient(circle at 56% 34%, transparent 0 13%, rgba(130, 150, 255, .85) 13.5% 17%, transparent 18%),
+        radial-gradient(ellipse 22% 30% at 22% 38%, #6b4a32 0 50%, transparent 70%),
+        radial-gradient(ellipse 30% 45% at 15% 30%, #2b2440 0 40%, transparent 70%),
+        radial-gradient(ellipse 35% 40% at 85% 25%, #2433ff, transparent 70%),
+        radial-gradient(ellipse 40% 30% at 85% 85%, #9aa8c8, transparent 70%),
+        radial-gradient(ellipse 50% 60% at 40% 50%, #6a5212, transparent 75%),
+        linear-gradient(120deg, #1a1408, #0b0d2a);
+      filter: blur(14px) saturate(1.1);
+      animation: drift 22s ease-in-out infinite alternate;
+    }
+    .logos-hero::after { content: ""; position: absolute; inset: 0; z-index: -1; background: radial-gradient(ellipse at center, rgba(0,0,0,.05), rgba(0,0,0,.55)); }
+    @keyframes drift { to { transform: scale(1.08) translate(-1.5%, 1%); } }
+
+    .logos-top {
+      display: flex; justify-content: space-between; gap: 1rem; padding: clamp(2rem, 5vw, 4rem) clamp(1.5rem, 5vw, 5rem) 0;
+      font-family: var(--font-display); font-stretch: var(--wide); font-weight: 500; text-transform: uppercase;
+      font-size: clamp(.75rem, 1.5vw, 1.35rem); line-height: .95; text-shadow: 0 1px 12px rgba(0,0,0,.55);
+    }
+    .logos-top span:last-child { text-align: right; }
+    .logos-title { align-self: center; justify-self: center; text-align: center; font-size: clamp(3.4rem, 11.5vw, 11rem); line-height: .9; padding-bottom: clamp(3rem, 6vw, 5rem); text-shadow: 0 6px 30px rgba(0,0,0,.45); }
+    .logos-title .sel { display: inline-block; padding: .04em .14em 0; margin-bottom: .08em; }
+
+    .marks { padding-block: var(--section) calc(var(--section) + var(--tear) * 2); background-image: linear-gradient(var(--grid-line-dk) 1px, transparent 1px), linear-gradient(90deg, var(--grid-line-dk) 1px, transparent 1px); background-size: var(--grid) var(--grid); }
+    .marks-head { display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 1rem 2rem; margin-bottom: clamp(2.5rem, 5vw, 4rem); }
+    .marks-head h2 { font-size: var(--fs-h2); }
+    .marks-head p { max-width: 36ch; color: #b9b9b5; }
+    .mark-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(1.25rem, 2.5vw, 2.5rem); }
+    .mark { display: flex; flex-direction: column; gap: 1rem; }
+    .mark-art {
+      position: relative; aspect-ratio: 1 / 1; display: grid; place-items: center;
+      background: var(--tile, var(--paper)); color: var(--tile-ink, var(--ink));
+      outline: 1.5px solid transparent; outline-offset: 6px;
+      transition: outline-color var(--t-fast) var(--ease);
+    }
+    .mark-art svg.logo { width: 48%; height: 48%; transition: transform var(--t-med) var(--ease-back); }
+    .mark-art > i { opacity: 0; transition: opacity var(--t-fast) var(--ease); }
+    .mark-art > i { position: absolute; width: 11px; height: 11px; background: #fff; border: 1.5px solid var(--frame); transform: translate(-50%, -50%); }
+    .mark-art > i:nth-of-type(1) { left: -6px; top: -6px; }
+    .mark-art > i:nth-of-type(2) { left: calc(100% + 6px); top: -6px; }
+    .mark-art > i:nth-of-type(3) { left: calc(100% + 6px); top: calc(100% + 6px); }
+    .mark-art > i:nth-of-type(4) { left: -6px; top: calc(100% + 6px); }
+    .mark:hover .mark-art, .mark:focus-within .mark-art { outline-color: var(--frame); }
+    .mark:hover .mark-art > i, .mark:focus-within .mark-art > i { opacity: 1; }
+    .mark:hover svg.logo, .mark:focus-within svg.logo { transform: scale(1.1) rotate(-4deg); }
+    .mark-meta { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; }
+    .mark-meta h3 { font-family: var(--font-display); font-stretch: var(--wide); font-weight: 800; text-transform: uppercase; font-size: clamp(1rem, 1.4vw, 1.25rem); letter-spacing: -.01em; }
+    .mark-meta span { font-size: var(--fs-small); color: #a9a9a5; white-space: nowrap; }
+    .mark a { display: contents; }
+
+    /* =====================================================================
+       06 · CONTACT
+       ===================================================================== */
+    .contact { padding-top: calc(var(--tear) * 2.2 + var(--section)); padding-bottom: var(--section); }
+    .contact-kicker { font-weight: 700; text-transform: uppercase; letter-spacing: .12em; font-size: var(--fs-small); display: flex; align-items: center; gap: .6rem; }
+    .contact-kicker .glyphs { font-size: 1.1rem; }
+    .contact h2 { font-size: clamp(3rem, 10.5vw, 10.5rem); margin: 1.25rem 0 clamp(2rem, 4vw, 3rem); }
+    .contact h2 em { font-style: normal; color: var(--red); }
+    .mail-row { display: flex; flex-wrap: wrap; align-items: center; gap: 1rem 1.5rem; }
+    .mail {
+      font-family: var(--font-display); font-stretch: var(--wide); font-weight: 800; font-size: clamp(1.2rem, 3.4vw, 2.6rem);
+      letter-spacing: -.02em; background: linear-gradient(var(--red), var(--red)) 0 100% / 0 4px no-repeat;
+      transition: background-size var(--t-med) var(--ease), color var(--t-fast);
+      padding-bottom: .1em; overflow-wrap: anywhere;
+    }
+    .mail:hover { background-size: 100% 4px; }
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: .5rem; min-height: 48px; padding: 0 1.25rem;
+      border: 2px solid var(--ink); font-weight: 700; font-size: .875rem; text-transform: uppercase; letter-spacing: .04em;
+      background: transparent; box-shadow: 4px 4px 0 var(--ink);
+      transition: transform var(--t-fast) var(--ease), box-shadow var(--t-fast) var(--ease), background-color var(--t-fast), color var(--t-fast);
+    }
+    .btn:hover { transform: translate(-2px, -2px); box-shadow: 6px 6px 0 var(--ink); }
+    .btn:active { transform: translate(4px, 4px); box-shadow: 0 0 0 var(--ink); }
+    .btn-red { background: var(--red); border-color: var(--ink); color: var(--white); }
+    .contact-note { font-size: var(--fs-hand); color: var(--red-deep); transform: rotate(-4deg); display: inline-block; }
+    .contact-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--gap); margin-top: clamp(3rem, 6vw, 5rem); padding-top: 1.75rem; border-top: 2px solid var(--ink); }
+    .contact-grid h3 { font-size: var(--fs-small); text-transform: uppercase; letter-spacing: .12em; color: var(--ink-muted); margin-bottom: .75rem; font-weight: 700; }
+    .contact-grid a, .contact-grid p { display: block; font-weight: 600; width: fit-content; }
+    .contact-grid a { min-height: 32px; display: flex; align-items: center; transition: color var(--t-fast); }
+    .contact-grid a:hover { color: var(--red); }
+
+    .footer { padding: 0 0 1.5rem; }
+    .footer .ticker { border: 0; }
+    .footer-row { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1rem; padding-top: 1.5rem; font-size: var(--fs-small); color: #9a9a96; }
+    .footer-row a { min-height: 44px; display: inline-flex; align-items: center; }
+    .footer-row a:hover { color: var(--white); }
+
+    /* =====================================================================
+       HIRE TOAST
+       ===================================================================== */
+    .toast {
+      position: fixed; left: 50%; bottom: max(1rem, env(safe-area-inset-bottom)); z-index: 130;
+      display: flex; align-items: center; gap: .9rem;
+      width: min(480px, calc(100% - 2rem));
+      padding: .75rem .75rem .75rem .85rem;
+      background: rgba(48, 48, 48, .82); color: #fff;
+      backdrop-filter: blur(16px) saturate(1.4); -webkit-backdrop-filter: blur(16px) saturate(1.4);
+      border: 1px solid rgba(255,255,255,.1); border-radius: 10px;
+      box-shadow: 0 20px 40px -12px rgba(0,0,0,.6);
+      transform: translate(-50%, calc(100% + 2rem)); opacity: 0;
+      transition: transform 600ms var(--ease-back), opacity 300ms var(--ease);
+    }
+    .toast.show { transform: translate(-50%, 0); opacity: 1; }
+    .toast-avatar { flex: none; width: 40px; height: 40px; border-radius: 50%; background: var(--paper); display: grid; place-items: center; overflow: hidden; border: 2px solid var(--red); }
+    .toast-avatar svg { width: 34px; height: 34px; }
+    .toast p { flex: 1; font-weight: 600; font-size: .95rem; line-height: 1.25; }
+    .toast-cta { flex: none; min-height: 40px; padding: 0 1.1rem; border-radius: 999px; background: #fff; color: #111; font-weight: 700; font-size: .82rem; display: inline-flex; align-items: center; transition: background-color var(--t-fast), color var(--t-fast); }
+    .toast-cta:hover { background: var(--red); color: #fff; }
+    .toast-close { flex: none; width: 44px; height: 44px; margin: -.5rem -.5rem -.5rem -.4rem; display: grid; place-items: center; color: #bbb; font-size: 1.1rem; border-radius: 50%; }
+    .toast-close:hover { color: #fff; }
+
+    .copied {
+      position: fixed; left: 50%; top: 1.25rem; z-index: 140; transform: translate(-50%, -150%);
+      background: var(--ink); color: var(--white); padding: .6rem 1rem; font-weight: 700; font-size: .85rem;
+      transition: transform 400ms var(--ease-back);
+    }
+    .copied.show { transform: translate(-50%, 0); }
+
+    /* =====================================================================
+       RESPONSIVE
+       ===================================================================== */
+    @media (max-width: 1024px) {
+      .about-grid { grid-template-columns: 2fr 3fr; }
+      .side { grid-column: 1 / -1; display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+      .side .block-title { margin-top: .6rem; }
+      .mark-grid { grid-template-columns: repeat(2, 1fr); }
+      .contact-grid { grid-template-columns: repeat(2, 1fr); row-gap: 2rem; }
+    }
+    @media (max-width: 720px) {
+      :root { --grid: 24px; --tear: 18px; }
+      .nav-links { gap: .9rem; }
+      .nav-links a { font-size: 11px; }
+      .nav-links .hide-sm { display: none; }
+      .hero-name { margin-left: 50%; }
+      .about-grid { grid-template-columns: 1fr; }
+      .figure-frame { max-width: 170px; }
+      .side { grid-template-columns: 1fr; }
+      .polaroids { flex-direction: column; align-items: center; gap: 2.5rem; }
+      .polaroid { flex: none; width: min(340px, 88%); --y: 0 !important; }
+      .polaroid:nth-child(1) { --r: -4deg; }
+      .polaroid:nth-child(2) { --r: 3deg; }
+      .polaroid:nth-child(3) { --r: -2deg; }
+      .logos-top { flex-direction: column; }
+      .logos-top span:last-child { text-align: left; }
+      .mark-grid { grid-template-columns: 1fr 1fr; gap: 1.25rem; }
+      .mark-meta { flex-direction: column; gap: .2rem; }
+      .contact-grid { grid-template-columns: 1fr 1fr; }
+      .toast p { font-size: .85rem; }
+      .toast-cta { padding: 0 .85rem; }
+    }
+    @media (max-width: 420px) {
+      .mark-grid { grid-template-columns: 1fr; }
+      .contact-grid { grid-template-columns: 1fr; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation: none !important; transition-duration: 1ms !important; }
+      .js .reveal { opacity: 1; transform: none; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip" href="#hello">Skip to content</a>
+  <div class="progress" aria-hidden="true"></div>
+
+  <!-- Reusable SVG: glyphs + red cutout outline filter -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+    <defs>
+      <symbol id="g-burst" viewBox="0 0 100 100"><path d="M50 2 58 30 84 16 70 42 98 50 70 58 84 84 58 70 50 98 42 70 16 84 30 58 2 50 30 42 16 16 42 30Z"/></symbol>
+      <symbol id="g-spark" viewBox="0 0 100 100"><path d="M50 0C54 34 66 46 100 50 66 54 54 66 50 100 46 66 34 54 0 50 34 46 46 34 50 0Z"/></symbol>
+      <symbol id="g-club" viewBox="0 0 100 100"><circle cx="50" cy="27" r="21"/><circle cx="27" cy="57" r="21"/><circle cx="73" cy="57" r="21"/><path d="M44 52h12l6 44H38z"/></symbol>
+      <!-- Thick red outline around any transparent image (your cutout PNG) -->
+      <filter id="red-outline" x="-15%" y="-15%" width="130%" height="130%" color-interpolation-filters="sRGB">
+        <feMorphology in="SourceAlpha" operator="dilate" radius="16" result="fat"/>
+        <feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="2" seed="4" result="n"/>
+        <feDisplacementMap in="fat" in2="n" scale="10" xChannelSelector="R" yChannelSelector="G" result="rough"/>
+        <feFlood flood-color="#ff1f2d"/>
+        <feComposite in2="rough" operator="in" result="outline"/>
+        <feMerge><feMergeNode in="outline"/><feMergeNode in="SourceGraphic"/></feMerge>
+      </filter>
+      <!-- Original tiger-head mark (used in hero "O" and the toast avatar) -->
+      <symbol id="tiger" viewBox="0 0 200 230">
+        <g fill="#f4f3ef" stroke="#151515" stroke-width="5" stroke-linejoin="round" stroke-linecap="round">
+          <path d="M44 62 30 14 78 40"/><path d="M156 62 170 14 122 40"/>
+          <path d="M42 32 46 52M158 32 154 52" stroke-width="4"/>
+          <path d="M100 30C55 30 30 62 28 104c-2 30 8 52 22 68l-14 10 26-2c12 18 24 34 38 38 14-4 26-20 38-38l26 2-14-10c14-16 24-38 22-68-2-42-27-74-72-74Z"/>
+        </g>
+        <g fill="#151515">
+          <path d="M100 34l-7 22h14zM82 38l-3 18 9-6zM118 38l3 18-9-6z"/>
+          <path d="M34 92l24 8-24 2zM30 118l26 2-24 8zM166 92l-24 8 24 2zM170 118l-26 2 24 8z"/>
+          <path d="M58 104c10-14 26-16 36-8-6 10-24 14-36 8Z"/>
+          <path d="M142 104c-10-14-26-16-36-8 6 10 24 14 36 8Z"/>
+          <path d="M54 84l40 8-2 6-40-6zM146 84l-40 8 2 6 40-6z"/>
+          <path d="M88 140h24l-12 13z"/>
+        </g>
+        <g fill="#ff1f2d"><circle cx="78" cy="101" r="4"/><circle cx="122" cy="101" r="4"/></g>
+        <g class="lid" fill="#f4f3ef" stroke="#151515" stroke-width="3"><path d="M56 96h40v12H56zM104 96h40v12h-40z"/></g>
+        <path d="M100 153v10m0 0c-6 10-18 10-22 2m22-2c6 10 18 10 22 2" fill="none" stroke="#151515" stroke-width="4" stroke-linecap="round"/>
+        <g fill="#151515"><circle cx="72" cy="158" r="2.4"/><circle cx="64" cy="150" r="2.4"/><circle cx="128" cy="158" r="2.4"/><circle cx="136" cy="150" r="2.4"/></g>
+        <path d="M84 190c8 10 24 10 32 0l-16 22z" fill="#151515"/>
+      </symbol>
+    </defs>
+  </svg>
+
+  <!-- ================= NAV ================= -->
+  <nav class="nav" aria-label="Primary">
+    <a class="nav-logo" href="#top">Tyger Lee</a>
+    <ul class="nav-links">
+      <li><a href="#hello">About</a></li>
+      <li class="hide-sm"><a href="#stu">Studio</a></li>
+      <li><a href="#work">Work</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <main id="top">
+    <!-- ======================================================
+         PAPER BLOCK 1: HERO + HELLO (torn bottom edge)
+         ====================================================== -->
+    <div class="tear-wrap tear-bottom" data-tear="bottom">
+      <div class="rim" aria-hidden="true"></div>
+      <div class="paper">
+
+        <!-- HERO -->
+        <header class="hero wrap">
+          <div class="hero-inner">
+            <div class="hero-top reveal">
+              <span>Designer / Illustrator</span>
+              <span>2026</span>
+            </div>
+            <h1 class="display hero-title reveal" style="--d:80ms" aria-label="Portfolio">
+              <span aria-hidden="true">Portf</span>
+              <span class="face" id="face" role="img" aria-label="Tyger Lee's tiger mark" tabindex="0">
+                <svg viewBox="0 0 200 230"><use href="#tiger"/></svg>
+              </span>
+              <span aria-hidden="true">lio</span>
+            </h1>
+            <div class="hero-name reveal" style="--d:200ms">
+              <svg viewBox="0 0 60 90" fill="none" stroke="#151515" stroke-width="2.6" stroke-linecap="round" aria-hidden="true">
+                <path d="M18 6c-10 22-10 52 4 70 6 8 18 10 34 6"/><path d="M8 18 18 4l9 15"/>
+              </svg>
+              <span class="hand">Tyger Lee</span>
+            </div>
+            <div class="hero-glyphs reveal" style="--d:300ms" aria-hidden="true">
+              <span class="glyphs"><svg><use href="#g-burst"/></svg><svg><use href="#g-spark"/></svg><svg><use href="#g-club"/></svg></span>
+            </div>
+            <a href="#hello" class="scroll-hint">Scroll</a>
+          </div>
+        </header>
+
+        <!-- HELLO / ABOUT -->
+        <section id="hello" class="about wrap" aria-labelledby="hello-title">
+          <div class="about-grid">
+            <!-- Full-body cutout in a Figma-style selection frame.
+                 Swap the <svg> for: <img src="tyger-fullbody.png" alt="Tyger Lee"> -->
+            <div class="figure-frame sel reveal">
+              <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+              <svg viewBox="0 0 120 300" role="img" aria-label="Full-body cut-out of Tyger Lee">
+                <defs><linearGradient id="fb" x1="0" x2="1"><stop offset="0" stop-color="#2a2a2a"/><stop offset="1" stop-color="#151515"/></linearGradient></defs>
+                <g fill="url(#fb)">
+                  <circle cx="60" cy="30" r="17"/><circle cx="48" cy="20" r="9"/><circle cx="60" cy="14" r="9"/><circle cx="72" cy="20" r="9"/><circle cx="76" cy="31" r="7"/><circle cx="44" cy="31" r="7"/>
+                  <path d="M53 46h14v10H53z"/>
+                  <path d="M30 60c4-6 14-8 30-8s26 2 30 8l8 70c1 6-8 8-10 2l-6-46-2 54H40l-2-54-6 46c-2 6-11 4-10-2Z"/>
+                  <path d="M40 134h40l4 150c0 6-14 6-14 0l-10-120-10 120c0 6-14 6-14 0Z"/>
+                </g>
+                <path d="M40 140h40l2 30H38z" fill="#4a6fa5" opacity=".55"/>
+              </svg>
+              <span class="sel-tag">Tyger · 270 × 600</span>
+            </div>
+
+            <div class="hello">
+              <h2 id="hello-title" class="display reveal">Hello</h2>
+              <p class="hi reveal">Hi, I’m Tyger Lee.</p>
+              <div class="reveal" style="--d:80ms">
+                <p>Design isn’t a side quest for me — it’s how I make sense of everything. I sketch on receipts, rename fonts in my head and redesign menus while I wait for food.</p>
+                <p>I chase ideas that make people stop scrolling: marks with teeth, type with attitude and illustration that feels hand-made, because it is.</p>
+                <p>Right now I’m studying graphic design and taking on brands, artists and small businesses who want to look as loud as they feel.</p>
+              </div>
+
+              <h3 class="display block-title reveal">Education</h3>
+              <div class="entry reveal">
+                <b>Bachelor of Design — Graphic Design</b>
+                <span>Your University | 2024 – 2028</span>
+              </div>
+            </div>
+
+            <aside class="side">
+              <div>
+                <h3 class="display block-title reveal">Skills</h3>
+                <ul class="skills reveal" aria-label="Software skills">
+                  <li><span class="app app-ps" tabindex="0" data-name="Photoshop" aria-label="Photoshop">Ps</span></li>
+                  <li><span class="app app-ai" tabindex="0" data-name="Illustrator" aria-label="Illustrator">Ai</span></li>
+                  <li><span class="app app-ae" tabindex="0" data-name="After Effects" aria-label="After Effects">Ae</span></li>
+                  <li><span class="app app-pr" tabindex="0" data-name="Premiere Pro" aria-label="Premiere Pro">Pr</span></li>
+                  <li><span class="app app-pc" tabindex="0" data-name="Procreate" aria-label="Procreate">
+                    <svg viewBox="0 0 40 40" aria-hidden="true"><defs><linearGradient id="pcg" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="#ff5f6d"/><stop offset=".5" stop-color="#b65cff"/><stop offset="1" stop-color="#3fd0ff"/></linearGradient></defs><path d="M6 32C14 22 22 14 34 6c-4 10-12 20-22 28-2 2-6 0-6-2Z" fill="url(#pcg)"/></svg>
+                  </span></li>
+                  <li><span class="app app-bl" tabindex="0" data-name="Blender" aria-label="Blender">
+                    <svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="23" cy="22" r="13" fill="#ea7600"/><circle cx="23" cy="22" r="8" fill="#fff"/><circle cx="23" cy="22" r="4.5" fill="#265787"/><path d="M2 18h14l-4-6z" fill="#ea7600"/></svg>
+                  </span></li>
+                </ul>
+              </div>
+              <div>
+                <h3 class="display block-title reveal">Experience</h3>
+                <div class="entry reveal">
+                  <p class="yr">2023 – Present</p>
+                  <b>Graphic Designer</b>
+                  <span>Freelance</span>
+                </div>
+                <div class="entry reveal">
+                  <p class="yr">2024 – 2025</p>
+                  <b>Graphic Designer &amp; Illustrator</b>
+                  <span>Studio Name</span>
+                </div>
+              </div>
+            </aside>
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <!-- ======================================================
+         BLACK BAND: STRATEGY ✦♣ CREATIVITY + cutout portrait
+         ====================================================== -->
+    <section class="dark band" aria-label="Strategy and creativity">
+      <div class="band-inner">
+        <div class="band-marquee" aria-hidden="true">
+          <div class="marquee" style="--speed: 40s">
+            <div class="band-words display"><span>Strategy</span><span class="glyphs"><svg><use href="#g-spark"/></svg><svg><use href="#g-club"/></svg></span><span>Creativity</span><span class="glyphs"><svg><use href="#g-spark"/></svg><svg><use href="#g-club"/></svg></span><span>Craft</span><span class="glyphs"><svg><use href="#g-spark"/></svg><svg><use href="#g-club"/></svg></span></div>
+            <div class="band-words display"><span>Strategy</span><span class="glyphs"><svg><use href="#g-spark"/></svg><svg><use href="#g-club"/></svg></span><span>Creativity</span><span class="glyphs"><svg><use href="#g-spark"/></svg><svg><use href="#g-club"/></svg></span><span>Craft</span><span class="glyphs"><svg><use href="#g-spark"/></svg><svg><use href="#g-club"/></svg></span></div>
+          </div>
+        </div>
+      </div>
+      <!-- Portrait cut-out with automatic thick red outline.
+           Swap the <svg> for: <img src="tyger-cutout.png" alt="Portrait of Tyger Lee"> (transparent PNG) -->
+      <div class="cutout">
+        <svg viewBox="0 0 400 440" role="img" aria-label="Portrait of Tyger Lee">
+          <defs>
+            <linearGradient id="skin" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#3a3a3a"/><stop offset="1" stop-color="#1c1c1c"/></linearGradient>
+            <linearGradient id="suit" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#262626"/><stop offset="1" stop-color="#0d0d0d"/></linearGradient>
+          </defs>
+          <path d="M40 440c6-70 40-104 110-118l20-26h60l20 26c70 14 104 48 110 118Z" fill="url(#suit)"/>
+          <path d="M170 296h60l-30 64z" fill="#111"/>
+          <path d="M176 250h48v52l-24 16-24-16z" fill="url(#skin)"/>
+          <ellipse cx="200" cy="190" rx="70" ry="86" fill="url(#skin)"/>
+          <ellipse cx="128" cy="196" rx="12" ry="20" fill="url(#skin)"/><ellipse cx="272" cy="196" rx="12" ry="20" fill="url(#skin)"/>
+          <g fill="#0e0e0e">
+            <circle cx="200" cy="96" r="44"/><circle cx="150" cy="112" r="34"/><circle cx="250" cy="112" r="34"/>
+            <circle cx="126" cy="146" r="24"/><circle cx="274" cy="146" r="24"/><circle cx="170" cy="76" r="26"/><circle cx="232" cy="76" r="26"/>
+            <circle cx="200" cy="62" r="24"/><circle cx="132" cy="176" r="12"/><circle cx="268" cy="176" r="12"/>
+          </g>
+          <g fill="#0b0b0b"><path d="M160 178c10-6 22-6 30 0-10 4-20 4-30 0zM210 178c8-6 20-6 30 0-10 4-20 4-30 0z"/><path d="M178 236c14-6 30-6 44 0-6 4-38 4-44 0z"/><path d="M190 256h20l-4 16h-12z"/></g>
+        </svg>
+      </div>
+    </section>
+
+    <!-- ======================================================
+         PAPER BLOCK 2: THE STU (torn top edge)
+         ====================================================== -->
+    <div class="tear-wrap tear-top" data-tear="top" style="z-index:4">
+      <div class="rim" aria-hidden="true"></div>
+      <section id="stu" class="paper stu" aria-labelledby="stu-title">
+        <h2 id="stu-title" class="display reveal">The Stu</h2>
+        <div class="polaroids">
+          <figure class="polaroid reveal">
+            <span class="tape" aria-hidden="true"></span>
+            <div class="shot"><div class="ph-desk" role="img" aria-label="Late-night desk setup with ring light and monitors"></div></div>
+            <figcaption class="hand">make it weird first,<br />then make it work.<small>— T.L.</small></figcaption>
+          </figure>
+          <figure class="polaroid reveal" style="--d:120ms">
+            <span class="tape" aria-hidden="true"></span>
+            <div class="shot"><div class="ph-eyes" role="img" aria-label="Close-up of Tyger concentrating"></div></div>
+            <figcaption class="hand">3am ideas hit different.<br />write them down anyway.<small>— T.L.</small></figcaption>
+          </figure>
+          <figure class="polaroid reveal" style="--d:240ms">
+            <span class="tape" aria-hidden="true"></span>
+            <div class="shot"><div class="ph-work" role="img" aria-label="Tyger working at the desk surrounded by sketches"></div></div>
+            <figcaption class="hand">the desk is a mess.<br />the work never is.<small>— T.L.</small></figcaption>
+          </figure>
+        </div>
+      </section>
+    </div>
+
+    <!-- ======================================================
+         LOGOS & MARKS
+         ====================================================== -->
+    <section id="work" aria-labelledby="logos-title">
+      <div class="ticker" aria-hidden="true">
+        <div class="marquee">
+          <div class="ticker-item display"><span>Logos &amp; Marks</span><span class="glyphs"><svg><use href="#g-burst"/></svg><svg><use href="#g-spark"/></svg><svg><use href="#g-club"/></svg></span><span>Logos &amp; Marks</span><span class="glyphs"><svg><use href="#g-burst"/></svg><svg><use href="#g-spark"/></svg><svg><use href="#g-club"/></svg></span><span>Logos &amp; Marks</span><span class="glyphs"><svg><use href="#g-burst"/></svg><svg><use href="#g-spark"/></svg><svg><use href="#g-club"/></svg></span></div>
+          <div class="ticker-item display"><span>Logos &amp; Marks</span><span class="glyphs"><svg><use href="#g-burst"/></svg><svg><use href="#g-spark"/></svg><svg><use href="#g-club"/></svg></span><span>Logos &amp; Marks</span><span class="glyphs"><svg><use href="#g-burst"/></svg><svg><use href="#g-spark"/></svg><svg><use href="#g-club"/></svg></span><span>Logos &amp; Marks</span><span class="glyphs"><svg><use href="#g-burst"/></svg><svg><use href="#g-spark"/></svg><svg><use href="#g-club"/></svg></span></div>
+        </div>
+      </div>
+
+      <div class="logos-hero">
+        <div class="bg" aria-hidden="true"></div>
+        <div class="logos-top">
+          <span>Portfolio of Tyger Lee</span>
+          <span>Ultimate<br />Graphic Design<br />Wizard</span>
+        </div>
+        <h2 id="logos-title" class="display logos-title reveal">
+          <span class="sel"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>Logos</span><br />&amp; Marks
+        </h2>
+      </div>
+
+      <div class="dark marks">
+        <div class="wrap">
+          <div class="marks-head">
+            <h2 class="display reveal">Selected<br />Marks</h2>
+            <p class="reveal">Identity systems for people with something to say. Click any mark to open the case study.</p>
+          </div>
+
+          <ul class="mark-grid">
+            <li class="mark reveal"><a href="#contact">
+              <div class="mark-art" style="--tile: var(--red); --tile-ink: var(--white)"><i></i><i></i><i></i><i></i>
+                <svg class="logo" viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="44" fill="none" stroke="currentColor" stroke-width="8"/><path d="M26 50h48c0 16-10 26-24 26S26 66 26 50Z" fill="currentColor"/><path d="M38 40c0-8 6-8 6-16M50 40c0-8 6-8 6-16M62 40c0-8 6-8 6-16" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round"/></svg>
+              </div>
+              <div class="mark-meta"><h3>Kōbō Ramen</h3><span>Restaurant · 2026</span></div>
+            </a></li>
+
+            <li class="mark reveal" style="--d:80ms"><a href="#contact">
+              <div class="mark-art" style="--tile: var(--paper)"><i></i><i></i><i></i><i></i>
+                <svg class="logo" viewBox="0 0 100 100" aria-hidden="true"><path d="M56 4 18 58h28l-6 38 42-58H52Z" fill="currentColor"/></svg>
+              </div>
+              <div class="mark-meta"><h3>Volt Cycle</h3><span>E-bikes · 2025</span></div>
+            </a></li>
+
+            <li class="mark reveal" style="--d:160ms"><a href="#contact">
+              <div class="mark-art" style="--tile: #222; --tile-ink: var(--white)"><i></i><i></i><i></i><i></i>
+                <svg class="logo" viewBox="0 0 100 100" aria-hidden="true"><path d="M50 4 96 50 50 96 4 50Z" fill="none" stroke="currentColor" stroke-width="7"/><path d="M50 26c10 12 12 24 0 48-12-24-10-36 0-48Z" fill="#ff1f2d"/></svg>
+              </div>
+              <div class="mark-meta"><h3>Moth &amp; Ember</h3><span>Candle co. · 2025</span></div>
+            </a></li>
+
+            <li class="mark reveal"><a href="#contact">
+              <div class="mark-art" style="--tile: var(--paper)"><i></i><i></i><i></i><i></i>
+                <svg class="logo" viewBox="0 0 100 100" aria-hidden="true"><path d="M20 80V30a15 15 0 0 1 30 0v40a15 15 0 0 0 30 0V20" fill="none" stroke="currentColor" stroke-width="12" stroke-linecap="round"/></svg>
+              </div>
+              <div class="mark-meta"><h3>North Loop</h3><span>Running club · 2024</span></div>
+            </a></li>
+
+            <li class="mark reveal" style="--d:80ms"><a href="#contact">
+              <div class="mark-art" style="--tile: #222; --tile-ink: var(--red)"><i></i><i></i><i></i><i></i>
+                <svg class="logo" viewBox="0 0 100 100" aria-hidden="true"><g fill="currentColor"><rect x="6" y="40" width="10" height="20" rx="5"/><rect x="24" y="24" width="10" height="52" rx="5"/><rect x="42" y="8" width="10" height="84" rx="5"/><rect x="60" y="28" width="10" height="44" rx="5"/><rect x="78" y="40" width="10" height="20" rx="5"/></g></svg>
+              </div>
+              <div class="mark-meta"><h3>Pulse FM</h3><span>Radio · 2024</span></div>
+            </a></li>
+
+            <li class="mark reveal" style="--d:160ms"><a href="#contact">
+              <div class="mark-art" style="--tile: var(--red); --tile-ink: var(--ink)"><i></i><i></i><i></i><i></i>
+                <svg class="logo" viewBox="0 0 100 100" aria-hidden="true"><path d="M8 8h84v20H60v64H40V28H8Z" fill="currentColor"/><path d="M40 44 22 52M40 62 18 70M60 44l18 8M60 62l22 8" stroke="currentColor" stroke-width="7" stroke-linecap="round"/></svg>
+              </div>
+              <div class="mark-meta"><h3>Tyger Monogram</h3><span>Personal · 2026</span></div>
+            </a></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================
+         PAPER BLOCK 3: CONTACT (torn top edge)
+         ====================================================== -->
+    <div class="tear-wrap tear-top" data-tear="top">
+      <div class="rim" aria-hidden="true"></div>
+      <section id="contact" class="paper contact" aria-labelledby="contact-title">
+        <div class="wrap">
+          <p class="contact-kicker reveal"><span class="glyphs" aria-hidden="true"><svg><use href="#g-burst"/></svg><svg><use href="#g-spark"/></svg><svg><use href="#g-club"/></svg></span> Open for projects — 2026</p>
+          <h2 id="contact-title" class="display reveal">Let’s make<br />it <em>loud.</em></h2>
+          <div class="mail-row reveal">
+            <a class="mail" href="mailto:hello@tygerlee.com">hello@tygerlee.com</a>
+            <button class="btn" type="button" id="copy" data-email="hello@tygerlee.com">Copy email</button>
+            <a class="btn btn-red" href="mailto:hello@tygerlee.com?subject=New%20project">Start a project →</a>
+          </div>
+          <p class="reveal" style="margin-top:1.5rem"><span class="hand contact-note">↑ slide into my inbox, I reply fast</span></p>
+
+          <div class="contact-grid">
+            <div class="reveal"><h3>Social</h3><a href="#">Instagram</a><a href="#">Behance</a><a href="#">Dribbble</a></div>
+            <div class="reveal" style="--d:80ms"><h3>Elsewhere</h3><a href="#">LinkedIn</a><a href="#">X / Twitter</a></div>
+            <div class="reveal" style="--d:160ms"><h3>Services</h3><p>Logos &amp; marks</p><p>Brand identity</p><p>Illustration</p></div>
+            <div class="reveal" style="--d:240ms"><h3>Based in</h3><p>Your City, Earth</p><p>Working worldwide</p></div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="dark footer">
+    <div class="ticker" aria-hidden="true">
+      <div class="marquee" style="--speed: 34s">
+        <div class="ticker-item display"><span>Tyger Lee</span><span class="glyphs"><svg><use href="#g-burst"/></svg></span><span>Designer</span><span class="glyphs"><svg><use href="#g-spark"/></svg></span><span>Illustrator</span><span class="glyphs"><svg><use href="#g-club"/></svg></span><span>Tyger Lee</span><span class="glyphs"><svg><use href="#g-burst"/></svg></span><span>Designer</span><span class="glyphs"><svg><use href="#g-spark"/></svg></span><span>Illustrator</span><span class="glyphs"><svg><use href="#g-club"/></svg></span></div>
+        <div class="ticker-item display"><span>Tyger Lee</span><span class="glyphs"><svg><use href="#g-burst"/></svg></span><span>Designer</span><span class="glyphs"><svg><use href="#g-spark"/></svg></span><span>Illustrator</span><span class="glyphs"><svg><use href="#g-club"/></svg></span><span>Tyger Lee</span><span class="glyphs"><svg><use href="#g-burst"/></svg></span><span>Designer</span><span class="glyphs"><svg><use href="#g-spark"/></svg></span><span>Illustrator</span><span class="glyphs"><svg><use href="#g-club"/></svg></span></div>
+      </div>
+    </div>
+    <div class="wrap footer-row">
+      <span>© 2026 Tyger Lee. All rights reserved.</span>
+      <a href="#top">Back to top ↑</a>
+    </div>
+  </footer>
+
+  <!-- Hire toast -->
+  <div class="toast" id="toast" role="status" aria-live="polite">
+    <span class="toast-avatar" aria-hidden="true"><svg viewBox="0 0 200 230"><use href="#tiger"/></svg></span>
+    <p>TYGER is available for hire</p>
+    <a class="toast-cta" href="#contact">Hire TYGER</a>
+    <button class="toast-close" type="button" aria-label="Dismiss">✕</button>
+  </div>
+  <div class="copied" id="copied" role="status" aria-live="polite">Email copied ✓</div>
+
+  <script>
+    (function () {
+      var root = document.documentElement;
+      root.classList.add('js');
+      var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      /* ---- Torn paper edges: build a jagged clip-path for each .tear-wrap ---- */
+      function rand(seed) { return function () { seed = (seed * 9301 + 49297) % 233280; return seed / 233280; }; }
+      function tear(el, i) {
+        var top = el.dataset.tear === 'top';
+        var depth = parseFloat(getComputedStyle(el).getPropertyValue('--tear')) || 28;
+        var r = rand(17 + i * 31), n = 90, pts = [], rim = [];
+        var base = depth * 0.9, swell = 0;
+        for (var k = 0; k <= n; k++) {
+          var x = (k / n) * 100;
+          swell += (r() - 0.5) * depth * 0.5;               // slow wander
+          swell = Math.max(-depth * 0.8, Math.min(depth * 0.8, swell));
+          var jag = r() * depth * 0.35;                      // fine fibres
+          var d = Math.max(2, base + swell + jag);
+          var dr = Math.max(0, d - 4 - r() * 5);             // white rim sits just outside
+          if (top) { pts.push(x + '% ' + d.toFixed(1) + 'px'); rim.push(x + '% ' + dr.toFixed(1) + 'px'); }
+          else     { pts.push(x + '% calc(100% - ' + d.toFixed(1) + 'px)'); rim.push(x + '% calc(100% - ' + dr.toFixed(1) + 'px)'); }
+        }
+        var clip, clipRim;
+        if (top) {
+          clip = 'polygon(' + pts.join(',') + ',100% 100%,0 100%)';
+          clipRim = 'polygon(' + rim.join(',') + ',100% 100%,0 100%)';
+        } else {
+          clip = 'polygon(0 0,100% 0,' + pts.reverse().join(',') + ')';
+          clipRim = 'polygon(0 0,100% 0,' + rim.reverse().join(',') + ')';
+        }
+        el.style.setProperty('--clip', clip);
+        el.style.setProperty('--clip-rim', clipRim);
+      }
+      function tearAll() { document.querySelectorAll('.tear-wrap').forEach(tear); }
+      tearAll();
+      window.addEventListener('resize', function () { clearTimeout(tearAll.t); tearAll.t = setTimeout(tearAll, 150); });
+
+      /* ---- Reveal on scroll ---- */
+      var reveals = document.querySelectorAll('.reveal');
+      if (reduce || !('IntersectionObserver' in window)) {
+        reveals.forEach(function (el) { el.classList.add('is-in'); });
+      } else {
+        var io = new IntersectionObserver(function (entries) {
+          entries.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('is-in'); io.unobserve(e.target); } });
+        }, { rootMargin: '0px 0px -8% 0px', threshold: 0.08 });
+        reveals.forEach(function (el) { io.observe(el); });
+      }
+
+      /* ---- Scroll progress + active nav link ---- */
+      var bar = document.querySelector('.progress');
+      var links = Array.prototype.slice.call(document.querySelectorAll('.nav-links a'));
+      var targets = links.map(function (a) { return document.querySelector(a.getAttribute('href')); });
+      var ticking = false;
+      function onScroll() {
+        var h = document.documentElement.scrollHeight - innerHeight;
+        bar.style.setProperty('--p', h > 0 ? (scrollY / h).toFixed(4) : 0);
+        var mid = innerHeight * 0.4, current = -1;
+        targets.forEach(function (t, i) { if (t && t.getBoundingClientRect().top < mid) current = i; });
+        links.forEach(function (a, i) { a.setAttribute('aria-current', i === current ? 'true' : 'false'); });
+        ticking = false;
+      }
+      addEventListener('scroll', function () { if (!ticking) { ticking = true; requestAnimationFrame(onScroll); } }, { passive: true });
+      onScroll();
+
+      /* ---- Tiger blinks now and then, and on click ---- */
+      var face = document.getElementById('face');
+      function blink() { face.classList.remove('blink'); void face.offsetWidth; face.classList.add('blink'); }
+      if (!reduce) setInterval(blink, 4200);
+      face.addEventListener('click', blink);
+      face.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); blink(); } });
+
+      /* ---- Hire toast (remembers dismissal) ---- */
+      var toast = document.getElementById('toast');
+      var dismissed = false;
+      try { dismissed = localStorage.getItem('tyger-toast') === '1'; } catch (e) {}
+      if (!dismissed) setTimeout(function () { toast.classList.add('show'); }, 2200);
+      toast.querySelector('.toast-close').addEventListener('click', function () {
+        toast.classList.remove('show');
+        try { localStorage.setItem('tyger-toast', '1'); } catch (e) {}
+      });
+
+      /* ---- Copy email with feedback ---- */
+      var copyBtn = document.getElementById('copy'), copied = document.getElementById('copied');
+      copyBtn.addEventListener('click', function () {
+        var email = copyBtn.dataset.email;
+        var done = function () { copied.classList.add('show'); copyBtn.textContent = 'Copied ✓'; setTimeout(function () { copied.classList.remove('show'); copyBtn.textContent = 'Copy email'; }, 1800); };
+        if (navigator.clipboard) navigator.clipboard.writeText(email).then(done, function () { location.href = 'mailto:' + email; });
+        else location.href = 'mailto:' + email;
+      });
+    })();
+  </script>
+</body>
+</html>
